@@ -8,7 +8,7 @@
    #include <stdio.h>
    #include <termios.h>
    char ttyName[16][16] = { "/dev/ttyS0","/dev/ttyS1","/dev/ttyS2","/dev/ttyS3",
-                                  "/dev/ttyUSB0","/dev/ttyUSB1","/dev/ttyUSB2","/dev/ttyUSB3" };
+                                  "/dev/ttyUSB0","/dev/ttyUSB1","/dev/ttyUSB2","/dev/ttyUSB3"};
    char *getTtyName(int *idx)
    {
        char *p=NULL;
@@ -171,8 +171,11 @@ int open_comport()
     char tmp[16];
     if( comport.number < 100 )
         sprintf(tmp,"/dev/ttyS%d",comport.number);
-    else
+    else if ( comport.number < 200 )
         sprintf(tmp,"/dev/ttyUSB%d",comport.number-100);
+    else
+       sprintf(tmp,"/dev/pts/%d",comport.number-200);
+            
     fdtty = open( tmp, O_RDWR | O_NOCTTY );
     if (fdtty <0) { return(-1); }
 
@@ -260,7 +263,7 @@ void send_command(const char *command)
       return;
    }
 #elif TERMIOS
-//    printf("tx:'%s'\n",command);
+    printf("tx:'%s'\n",command);
 	if( write(fdtty,tx_buf,strlen(tx_buf)) == -1 )
 	{
 	  perror("write tty");
@@ -330,9 +333,9 @@ int read_comport(char *response)
        }
     }
 
-//    printf("rx:'");
-//    i=0;while(response[i]!=0) { printf("%c",response[i]>=32?response[i]:'.');i++;}
-//    printf("'\n");
+    printf("rx:'");
+    i=0;while(response[i]!=0) { printf("%c",response[i]>=32?response[i]:'.');i++;}
+    printf("'\n");
 
 #else
    char c;

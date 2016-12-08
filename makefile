@@ -57,8 +57,6 @@ all: $(BIN)
 
 clean:
 	rm -f $(OBJ)
-
-veryclean: clean
 	rm -f $(BIN)
 
 scantool.res: scantool.rc scantool.ico

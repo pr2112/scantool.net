@@ -5,6 +5,7 @@
 #include "serial.h"
 #include "options.h"
 #include "error_handlers.h"
+
 #ifdef ALLEGRO_WINDOWS
    #include "get_port_names.h"
 #elif TERMIOS
@@ -22,6 +23,7 @@
 #else
    #define DEFAULT_DISPLAY_MODE         WINDOWED_MODE
 #endif
+
 #define DEFAULT_SYSTEM_OF_MEASURMENTS   IMPERIAL
 #define DEFAULT_COMPORT_NUMBER          -1
 #define DEFAULT_BAUD_RATE               BAUD_RATE_38400
@@ -371,6 +373,19 @@ void fill_comport_list()
             fclose(f);
         }
     }
+    for(i=0;i<8;i++)
+    {
+        snprintf(tmp,sizeof(tmp),"/dev/pts/%d",i);
+        f=fopen(tmp,"r");
+        if( f != NULL )
+        {
+            strcpy(comport_list_strings + nb * PORT_NAME_BUF_SIZE,tmp);
+            comport_list_numbers[nb]=200+i;
+            nb++;
+            fclose(f);
+        }
+    }
+
     comport_list_size = nb;
 #else
    
