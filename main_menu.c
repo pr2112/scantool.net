@@ -12,18 +12,14 @@
 #define LOGO                       1
 #define INEXPENSIVE_ALTERNATIVES   2
 #define SUNFIRE                    3
-#define READ_CODES                 5
-#define SENSOR_DATA                6
-#define FREEZE_FRAME               7
-#define TESTS                      8
-#define OPTIONS                    9
-#define ABOUT                      10
-#define EXIT                       11
-
 
 // procedure declarations
 static int read_codes_proc(int msg, DIALOG *d, int c);
 static int sensor_data_proc(int msg, DIALOG *d, int c);
+
+static int future1_proc(int msg, DIALOG *d, int c);
+static int future2_proc(int msg, DIALOG *d, int c);
+
 static int freeze_frame_proc(int msg, DIALOG *d, int c);
 static int tests_proc(int msg, DIALOG *d, int c);
 static int options_proc(int msg, DIALOG *d, int c);
@@ -38,25 +34,33 @@ static char welcome_message[256];
 
 static DIALOG main_dialog[] =
 {
-   /* (proc)            (x)  (y)  (w)  (h)  (fg)         (bg)     (key) (flags) (d1) (d2) (dp)                 (dp2) (dp3) */
-   { d_clear_proc,      0,   0,   0,   0,   0,           C_WHITE, 0,    0,      0,   0,   NULL,                NULL, NULL },
-   { d_bitmap_proc,     25,  25,  58,  430, 0,           0,       0,    0,      0,   0,   NULL,                NULL, NULL },
-   { d_bitmap_proc,     115, 25,  260, 106, 0,           0,       0,    0,      0,   0,   NULL,                NULL, NULL },
-   { d_bitmap_proc,     115, 141, 260, 142, 0,           0,       0,    0,      0,   0,   NULL,                NULL, NULL },
-   { button_desc_proc,  115, 283, 260, 147, C_DARK_GRAY, C_WHITE, 0,    0,      0,   0,   current_description, NULL, NULL },
-   { read_codes_proc,   408, 25,  207, 57,  0,           0,       0,    D_EXIT, 0,   0,   NULL,                NULL, NULL },
-   { sensor_data_proc,  408, 87,  207, 57,  0,           0,       0,    D_EXIT, 0,   0,   NULL,                NULL, NULL },
-   { freeze_frame_proc, 408, 149, 207, 57,  0,           0,       0,    D_EXIT, 0,   0,   NULL,                NULL, NULL },
-   { tests_proc,        408, 211, 207, 57,  0,           0,       0,    D_EXIT, 0,   0,   NULL,                NULL, NULL },
-   { options_proc,      408, 273, 207, 57,  0,           0,       0,    D_EXIT, 0,   0,   NULL,                NULL, NULL },
-   { about_proc,        408, 335, 207, 57,  0,           0,       0,    D_EXIT, 0,   0,   NULL,                NULL, NULL },
-   { exit_proc,         408, 397, 207, 57,  0,           0,       'x',  D_EXIT, 0,   0,   NULL,                NULL, NULL },
-   { genuine_proc,      0,   0,   0,   0,   0,           0,       0,    0,      0,   0,   NULL,                NULL, NULL },
-   { d_yield_proc,      0,   0,   0,   0,   0,           0,       0,    0,      0,   0,   NULL,                NULL, NULL },
-   { NULL,              0,   0,   0,   0,   0,           0,       0,    0,      0,   0,   NULL,                NULL, NULL }
+   /* (proc)            (x)  (y)  (w)  (h)  (fg)         (bg)           (key) (flags) (d1) (d2) (dp)                 (dp2) (dp3) */
+   { d_clear_proc,      0,   0,   0,   0,   0,           C_WHITE,       0,    0,      0,   0,   NULL,                NULL, NULL },
+   { d_bitmap_proc,     25,  25,  58,  430, 0,           0,             0,    0,      0,   0,   NULL,                NULL, NULL },
+   { d_bitmap_proc,     115, 25,  260, 106, 0,           0,             0,    0,      0,   0,   NULL,                NULL, NULL },
+   { d_bitmap_proc,     115, 141, 260, 142, 0,           0,             0,    0,      0,   0,   NULL,                NULL, NULL },
+   { button_desc_proc,  115, 283, 260, 147, C_DARK_GRAY, C_WHITE,       0,    0,      0,   0,   current_description, NULL, NULL },
+   { read_codes_proc,   408, 25,  207, 38,  C_BLACK,     C_GREEN,       0,    D_EXIT, 0,   0,   "Read Codes",        NULL, NULL },
+   { sensor_data_proc,  408, 73,  207, 38,  C_BLACK,     C_DARK_YELLOW, 0,    D_EXIT, 0,   0,   "Sensor Data",       NULL, NULL },
+
+   { future1_proc,       408, 121, 207, 38,  C_BLACK,     C_PURPLE,      0,    D_EXIT, 0,   0,   "Future 1",         NULL, NULL },
+   { future2_proc,       408, 168, 207, 38,  C_BLACK,     C_GREEN,       0,    D_EXIT, 0,   0,   "Future 2",         NULL, NULL },
+
+   
+   { freeze_frame_proc, 408, 217, 207, 38,  C_BLACK,     C_PURPLE,      0,    D_EXIT, 0,   0,   "Freeze Frame",      NULL, NULL },
+   { tests_proc,        408, 264, 207, 38,  C_BLACK,     C_GREEN,       0,    D_EXIT, 0,   0,   "Tests",             NULL, NULL },
+   
+   { options_proc,      408, 313, 207, 38,  C_BLACK,     C_DARK_YELLOW, 0,    D_EXIT, 0,   0,   "Options",           NULL, NULL },
+   { about_proc,        408, 360, 207, 38,  C_BLACK,     C_PURPLE,      0,    D_EXIT, 0,   0,   "About",             NULL, NULL },
+   { exit_proc,         408, 407, 207, 38,  C_BLACK,     C_GREEN,       0,    D_EXIT, 0,   0,   "Exit",              NULL, NULL },
+   { genuine_proc,      0,   0,   0,   38,  0,           0,             0,    0,      0,   0,   NULL,                NULL, NULL },
+   { d_yield_proc,      0,   0,   0,   0,   0,           0,             0,    0,      0,   0,   NULL,                NULL, NULL },
+   { NULL,              0,   0,   0,   0,   0,           0,             0,    0,      0,   0,   NULL,                NULL, NULL }
 };
 
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int display_main_menu()
 {
    // load all the buttons:
@@ -66,29 +70,6 @@ int display_main_menu()
    main_dialog[LOGO].dp = datafile[LOGO_BMP].dat;
    main_dialog[INEXPENSIVE_ALTERNATIVES].dp = datafile[INEXPENSIVE_ALTERNATIVES_BMP].dat;
    main_dialog[SUNFIRE].dp = datafile[SUNFIRE_BMP].dat;
-   main_dialog[READ_CODES].dp = datafile[READ_CODES1_BMP].dat;
-   main_dialog[SENSOR_DATA].dp = datafile[SENSOR_DATA1_BMP].dat;
-   main_dialog[FREEZE_FRAME].dp = datafile[FREEZE_FRAME1_BMP].dat;
-   main_dialog[TESTS].dp = datafile[TESTS1_BMP].dat;
-   main_dialog[OPTIONS].dp = datafile[OPTIONS1_BMP].dat;
-   main_dialog[ABOUT].dp = datafile[ABOUT1_BMP].dat;
-   main_dialog[EXIT].dp = datafile[EXIT1_BMP].dat;
-
-   main_dialog[READ_CODES].dp2 = datafile[READ_CODES2_BMP].dat;
-   main_dialog[SENSOR_DATA].dp2 = datafile[SENSOR_DATA2_BMP].dat;
-   main_dialog[FREEZE_FRAME].dp2 = datafile[FREEZE_FRAME2_BMP].dat;
-   main_dialog[TESTS].dp2 = datafile[TESTS2_BMP].dat;
-   main_dialog[OPTIONS].dp2 = datafile[OPTIONS2_BMP].dat;
-   main_dialog[ABOUT].dp2 = datafile[ABOUT2_BMP].dat;
-   main_dialog[EXIT].dp2 = datafile[EXIT2_BMP].dat;
-
-   main_dialog[READ_CODES].dp3 = datafile[READ_CODES3_BMP].dat;
-   main_dialog[SENSOR_DATA].dp3 = datafile[SENSOR_DATA3_BMP].dat;
-   main_dialog[FREEZE_FRAME].dp3 = datafile[FREEZE_FRAME3_BMP].dat;
-   main_dialog[TESTS].dp3 = datafile[TESTS3_BMP].dat;
-   main_dialog[OPTIONS].dp3 = datafile[OPTIONS3_BMP].dat;
-   main_dialog[ABOUT].dp3 = datafile[ABOUT3_BMP].dat;
-   main_dialog[EXIT].dp3 = datafile[EXIT3_BMP].dat;
 
    sprintf(welcome_message, "Roll mouse cursor over menu buttons to see their descriptions.");
    strcpy(button_description, welcome_message);
@@ -96,11 +77,12 @@ int display_main_menu()
    return do_dialog(main_dialog, -1);
 }
 
-
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int read_codes_proc(int msg, DIALOG *d, int c)
 {
    int ret;
-   ret = nostretch_icon_proc(msg, d, c); // call the parent object
+   ret = d_button_proc(msg, d, c); // call the parent object
 
    if (msg == MSG_GOTMOUSE) // if we got mouse, display description
       sprintf(button_description, "Read codes and their definitions, turn off MIL and erase diagnostic test data.");
@@ -115,11 +97,13 @@ int read_codes_proc(int msg, DIALOG *d, int c)
 }
 
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int sensor_data_proc(int msg, DIALOG *d, int c)
 {
    int ret;
    int reset = FALSE;
-   ret = nostretch_icon_proc(msg, d, c); // call the parent object
+   ret = d_button_proc(msg, d, c); // call the parent object
 
    if (msg == MSG_GOTMOUSE) // if we got mouse, display description
       sprintf(button_description, "Display current sensor data (RPM, Engine Load, Coolant Temperature, Speed, etc.)");
@@ -151,10 +135,12 @@ int sensor_data_proc(int msg, DIALOG *d, int c)
 }
 
 
-int freeze_frame_proc(int msg, DIALOG *d, int c)
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+int future1_proc(int msg, DIALOG *d, int c)
 {
    int ret;
-   ret = nostretch_icon_proc(msg, d, c); // call the parent object
+   ret = d_button_proc(msg, d, c); // call the parent object
 
    if (msg == MSG_GOTMOUSE) // if we got mouse, display description
       sprintf(button_description, "Display freeze frame data (not implemented in this version).");
@@ -170,6 +156,50 @@ int freeze_frame_proc(int msg, DIALOG *d, int c)
 }
 
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+int future2_proc(int msg, DIALOG *d, int c)
+{
+   int ret;
+   ret = d_button_proc(msg, d, c); // call the parent object
+
+   if (msg == MSG_GOTMOUSE) // if we got mouse, display description
+      sprintf(button_description, "Display freeze frame data (not implemented in this version).");
+
+   if (ret == D_CLOSE)           // trap the close value
+   {
+      alert("This feature is not implemented", " in this version", NULL, "OK", NULL, 0, 0);
+      //display_freeze_frame(); // display freeze frame data
+      //strcpy(button_description, welcome_message);
+      return D_REDRAWME;
+   }
+   return ret;  // return
+}
+
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+int freeze_frame_proc(int msg, DIALOG *d, int c)
+{
+   int ret;
+   ret = d_button_proc(msg, d, c); // call the parent object
+
+   if (msg == MSG_GOTMOUSE) // if we got mouse, display description
+      sprintf(button_description, "Display freeze frame data (not implemented in this version).");
+
+   if (ret == D_CLOSE)           // trap the close value
+   {
+      alert("This feature is not implemented", " in this version", NULL, "OK", NULL, 0, 0);
+      //display_freeze_frame(); // display freeze frame data
+      //strcpy(button_description, welcome_message);
+      return D_REDRAWME;
+   }
+   return ret;  // return
+}
+
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int tests_proc(int msg, DIALOG *d, int c)
 {
    int ret;
@@ -177,7 +207,7 @@ int tests_proc(int msg, DIALOG *d, int c)
    if (msg == MSG_GOTMOUSE) // if we got mouse, display description
       sprintf(button_description, "Display mode 5, 6, & 7 test results (not implemented in this version).");
 
-   ret = nostretch_icon_proc(msg, d, c); // call the parent object
+   ret = d_button_proc(msg, d, c); // call the parent object
 
    if (ret == D_CLOSE)           // trap the close value
    {  
@@ -188,6 +218,8 @@ int tests_proc(int msg, DIALOG *d, int c)
 }
 
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int options_proc(int msg, DIALOG *d, int c)
 {
    static int chip_was_reset = FALSE;
@@ -229,7 +261,7 @@ int options_proc(int msg, DIALOG *d, int c)
          break;
    }
    
-   ret = nostretch_icon_proc(msg, d, c); // call the parent object
+   ret = d_button_proc(msg, d, c); // call the parent object
    
    if (ret == D_CLOSE)           // trap the close value
    {
@@ -244,10 +276,12 @@ int options_proc(int msg, DIALOG *d, int c)
 }
 
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int about_proc(int msg, DIALOG *d, int c)
 {
    int ret;
-   ret = nostretch_icon_proc(msg, d, c); // call the parent object
+   ret = d_button_proc(msg, d, c); // call the parent object
 
    if (msg == MSG_GOTMOUSE) // if we got mouse, display description
       sprintf(button_description, "Learn more about this program, and find out where you can buy the OBD-II interface.");
@@ -262,10 +296,12 @@ int about_proc(int msg, DIALOG *d, int c)
 }
 
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int exit_proc(int msg, DIALOG *d, int c)
 {
    int ret;
-   ret = nostretch_icon_proc(msg, d, c); // call the parent object
+   ret = d_button_proc(msg, d, c); // call the parent object
 
    if (msg == MSG_GOTMOUSE) // if we got mouse, display description
       sprintf(button_description, "Exit the program.");
@@ -279,6 +315,8 @@ int exit_proc(int msg, DIALOG *d, int c)
 }
 
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int button_desc_proc(int msg, DIALOG *d, int c)
 {
    int ret;
@@ -296,6 +334,8 @@ int button_desc_proc(int msg, DIALOG *d, int c)
    return ret;  // return
 }
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 int genuine_proc(int msg, DIALOG *d, int c)
 {
    if (msg == MSG_IDLE)
