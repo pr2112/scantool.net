@@ -31,12 +31,19 @@ void write_log(const char *log_string)
 #ifdef LOG_COMMS
 void write_comm_log(const char *marker, const char *data)
 {
+   char temp_buf[64];
+   time_t current_time;
+   
+   time(&current_time);  // get current time, and store it in current_time
+   strcpy(temp_buf, ctime(&current_time));
+   temp_buf[strlen(temp_buf)-1] = 0;
+
    FILE *logfile = NULL;
 
    logfile = fopen(comm_log_file_name, "a");
    if (logfile == NULL)
       fatal_error("Could not open comm log file for writing!");
-   fprintf(logfile, "[%s]%s[/%s]\n", marker, data, marker);
+   fprintf(logfile, "[%s][%s]%s[/%s]\n", temp_buf, marker, data, marker);
    fclose(logfile);
 }
 #endif
