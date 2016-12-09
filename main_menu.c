@@ -118,7 +118,10 @@ int sensor_data_proc(int msg, DIALOG *d, int c)
             comport.status = NOT_OPEN;   // reset comport status
             while (comport.status == NOT_OPEN)
             {
-               if (alert("COM Port could not be opened.", "Please check that port settings are correct", "and that no other application is using it", "&Configure Port", "&Ignore", 'c', 'i') == 1)
+               if (alert("COM Port could not be opened.",
+                         "Please check that port settings are correct",
+                         "and that no other application is using it",
+                         "&Configure Port", "&Ignore", 'c', 'i') == 1)
                   display_options();
                else
                   comport.status = USER_IGNORED;
@@ -245,7 +248,10 @@ int options_proc(int msg, DIALOG *d, int c)
             if (comport.number < 0)
                ret = alert("COM Port has not been selected.", NULL, NULL, "&Configure Port", "&Ignore", 'c', 'i');
             else
-               ret = alert("COM Port could not be opened.", "Please check that port settings are correct", "and that no other application is using it", "&Configure Port", "&Ignore", 'c', 'i');
+               ret = alert("COM Port could not be opened.",
+                           "Please check that port settings are correct",
+                           "and that no other application is using it",
+                           "&Configure Port", "&Ignore", 'c', 'i');
             
             if (ret == 1)
                display_options();

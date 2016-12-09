@@ -1029,7 +1029,10 @@ int sensor_proc(int msg, DIALOG *d, int c)
                         device_connected = FALSE;
                         if  (!ignore_device_not_connected)
                         {
-                           ret = alert3("Device is not responding.", "Please check that it is connected", "and the port settings are correct", "&OK", "&Configure Port", "&Ignore", 'o', 'c', 'i');
+                           ret = alert3("Device is not responding.",
+                                        "Please check that it is connected",
+                                        "and the port settings are correct",
+                                        "&OK", "&Configure Port", "&Ignore", 'o', 'c', 'i');
                            if (ret == 2)
                               display_options();   // let the user choose correct settings
                            else if (ret == 3)
@@ -1041,7 +1044,10 @@ int sensor_proc(int msg, DIALOG *d, int c)
 
                      while (comport.status == NOT_OPEN)
                      {
-                        if (alert("Port is not ready.", "Please check that you specified the correct port", "and that no other application is using it", "&Configure Port", "&Ignore", 'c', 'i') == 1)
+                        if (alert("Port is not ready.",
+                                  "Please check that you specified the correct port",
+                                  "and that no other application is using it",
+                                  "&Configure Port", "&Ignore", 'c', 'i') == 1)
                            display_options(); // let the user choose correct settings
                         else
                            comport.status = USER_IGNORED;

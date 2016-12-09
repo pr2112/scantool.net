@@ -140,7 +140,10 @@ int obd_info_proc(int msg, DIALOG *d, int c)
       {
          while (comport.status != READY)
          {
-            if (alert("Port is not ready.", "Please check that you specified the correct port", "and that no other application is using it", "Configure &Port", "&Cancel", 'p', 'c') == 1)
+            if (alert("Port is not ready.",
+                      "Please check that you specified the correct port",
+                      "and that no other application is using it",
+                      "Configure &Port", "&Cancel", 'p', 'c') == 1)
                display_options(); // let the user choose correct settings
             else
                return D_REDRAWME;
@@ -572,7 +575,10 @@ int obd_info_getter_proc(int msg, DIALOG *d, int c)
                   else
                   {
                      if (status == ERR_NO_DATA || status == UNABLE_TO_CONNECT)
-                        status = alert("There may have been a loss of connection.", "Please check connection to the vehicle,", "and make sure the ignition is ON", "&Retry", "&Cancel", 'r', 'c');
+                        status = alert("There may have been a loss of connection.",
+                                       "Please check connection to the vehicle,",
+                                       "and make sure the ignition is ON",
+                                       "&Retry", "&Cancel", 'r', 'c');
                      else if (status >= INTERFACE_ID)
                         status = 1;
                      else  // all other errors

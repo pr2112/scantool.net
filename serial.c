@@ -542,31 +542,71 @@ int display_error_message(int error, int retry)
    switch (error)
    {
       case BUS_ERROR:
-         return alert("Bus Error: OBDII bus is shorted to Vbatt or Ground.", NULL, NULL, (retry) ? "Retry" : "OK", (retry) ? "Cancel" : NULL, 0, 0);
+         return alert("Bus Error: OBDII bus is shorted to Vbatt or Ground.",
+                      NULL,
+                      NULL,
+                      (retry) ? "Retry" : "OK",
+                      (retry) ? "Cancel" : NULL,
+                      0, 0);
 
       case BUS_BUSY:
-         return alert("OBD Bus Busy. Try again.", NULL, NULL, (retry) ? "Retry" : "OK", (retry) ? "Cancel" : NULL, 0, 0);
+         return alert("OBD Bus Busy. Try again.",
+                      NULL,
+                      NULL,
+                      (retry) ? "Retry" : "OK",
+                      (retry) ? "Cancel" : NULL,
+                      0, 0);
 
       case BUS_INIT_ERROR:
-         return alert("OBD Bus Init Error. Check connection to the vehicle,", "make sure the vehicle is OBD-II compliant,", "and ignition is ON.", (retry) ? "Retry" : "OK", (retry) ? "Cancel" : NULL, 0, 0);
+         return alert("OBD Bus Init Error. Check connection to the vehicle,",
+                      "make sure the vehicle is OBD-II compliant,",
+                      "and ignition is ON.",
+                      (retry) ? "Retry" : "OK",
+                      (retry) ? "Cancel" : NULL,
+                      0, 0);
 
       case UNABLE_TO_CONNECT:
-         return alert("Unable to connect to OBD bus.", "Check connection to the vehicle. Make sure", "the vehicle is OBD-II compliant, and ignition is ON.", (retry) ? "Retry" : "OK", (retry) ? "Cancel" : NULL, 0, 0);
+         return alert("Unable to connect to OBD bus.",
+                      "Check connection to the vehicle. Make sure",
+                      "the vehicle is OBD-II compliant, and ignition is ON.",
+                      (retry) ? "Retry" : "OK",
+                      (retry) ? "Cancel" : NULL,
+                      0, 0);
 
       case CAN_ERROR:
-         return alert("CAN Error.", "Check connection to the vehicle. Make sure", "the vehicle is OBD-II compliant, and ignition is ON.", (retry) ? "Retry" : "OK", (retry) ? "Cancel" : NULL, 0, 0);
+         return alert("CAN Error.",
+                      "Check connection to the vehicle. Make sure",
+                      "the vehicle is OBD-II compliant, and ignition is ON.",
+                      (retry) ? "Retry" : "OK",
+                      (retry) ? "Cancel" : NULL,
+                      0, 0);
 
       case DATA_ERROR:
       case DATA_ERROR2:
-         return alert("Data Error: there has been a loss of data.", "You may have a bad connection to the vehicle,", "check the cable and try again.", (retry) ? "Retry" : "OK", (retry) ? "Cancel" : NULL, 0, 0);
+         return alert("Data Error: there has been a loss of data.",
+                      "You may have a bad connection to the vehicle,",
+                      "check the cable and try again.",
+                      (retry) ? "Retry" : "OK",
+                      (retry) ? "Cancel" : NULL,
+                      0, 0);
 
       case BUFFER_FULL:
-         return alert("Hardware data buffer overflow.", NULL, NULL, (retry) ? "Retry" : "OK", (retry) ? "Cancel" : NULL, 0, 0);
+         return alert("Hardware data buffer overflow.",
+                      NULL,
+                      NULL,
+                      (retry) ? "Retry" : "OK",
+                      (retry) ? "Cancel" : NULL,
+                      0, 0);
 
       case SERIAL_ERROR:
       case UNKNOWN_CMD:
       case RUBBISH:
-         return alert("Serial Link Error: please check connection", "between computer and scan tool.", NULL, (retry) ? "Retry" : "OK", (retry) ? "Cancel" : NULL, 0, 0);
+         return alert("Serial Link Error: please check connection",
+                      "between computer and scan tool.",
+                      NULL,
+                      (retry) ? "Retry" : "OK",
+                      (retry) ? "Cancel" : NULL,
+                      0, 0);
 
       default:
          sprintf(buf, "Unknown error occured: %i", error);

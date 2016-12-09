@@ -391,7 +391,10 @@ void read_codes()
 {
    while (comport.status != READY)
    {
-      if (alert("Port is not ready.", "Please check that you specified the correct port", "and that no other application is using it", "Configure &Port", "&Cancel", 'p', 'c') == 1)
+      if (alert("Port is not ready.",
+                "Please check that you specified the correct port",
+                "and that no other application is using it",
+                "Configure &Port", "&Cancel", 'p', 'c') == 1)
          display_options(); // let the user choose correct settings
       else
          return;
@@ -411,10 +414,11 @@ int read_tr_codes_proc(int msg, DIALOG *d, int c)
    
    switch (msg)
    {
-      case MSG_READ_CODES: case MSG_CLEAR_CODES:
+      case MSG_READ_CODES:
+      case MSG_CLEAR_CODES:
          // if we are currently reading or clearing codes, and the button is enabled,
          if (!(d->flags & D_DISABLED))
-         {
+            {
             d->flags |= D_DISABLED;     // disable the button
             return D_REDRAWME;
          }
@@ -451,7 +455,8 @@ int clear_codes_proc(int msg, DIALOG *d, int c)
    int ret;
    switch (msg)
    {
-      case MSG_READ_CODES: case MSG_CLEAR_CODES:
+      case MSG_READ_CODES:
+      case MSG_CLEAR_CODES:
          // if we are currently reading or clearing codes, and the button is enabled,
          if (!(d->flags & D_DISABLED))
          {
@@ -476,7 +481,10 @@ int clear_codes_proc(int msg, DIALOG *d, int c)
    {
       while (!simulate && comport.status != READY)
       {
-         if (alert("Port is not ready.", "Please check that you specified the correct port", "and that no other application is using it", "Configure &Port", "&Cancel", 'p', 'c') == 1)
+         if (alert("Port is not ready.",
+                   "Please check that you specified the correct port",
+                   "and that no other application is using it",
+                   "Configure &Port", "&Cancel", 'p', 'c') == 1)
             display_options(); // let the user choose correct settings
          else
             return D_REDRAWME;
@@ -571,9 +579,13 @@ int tr_code_proc(int msg, DIALOG *d, int c)
                      if (response_type == HEX_DATA) // if everything seems to be fine now,
                      {
                         if (current_request == CLEAR_CODES)
-                           alert("There may have been a temporary loss of connection.", "Please try clearing codes again.", NULL, "OK", NULL, 0, 0);
+                           alert("There may have been a temporary loss of connection.",
+                                 "Please try clearing codes again.",
+                                 NULL, "OK", NULL, 0, 0);
                         else if (current_request == NUM_OF_CODES)
-                           alert("There may have been a temporary loss of connection.", "Please try reading codes again.", NULL, "OK", NULL, 0, 0);
+                           alert("There may have been a temporary loss of connection.",
+                                 "Please try reading codes again.",
+                                 NULL, "OK", NULL, 0, 0);
                         else if (current_request == READ_CODES)
                         {
                            current_request = READ_PENDING;
@@ -583,9 +595,15 @@ int tr_code_proc(int msg, DIALOG *d, int c)
                      else if (response_type == ERR_NO_DATA)
                      {
                         if (current_request == CLEAR_CODES) // if we were clearing codes,
-                           alert("Communication problem: vehicle did not confirm successful", "deletion of trouble codes.  Please check connection to the vehicle,", "make sure the ignition is ON, and try clearing the codes again.", "OK", NULL, 0, 0);
+                           alert("Communication problem: vehicle did not confirm successful",
+                                 "deletion of trouble codes.  Please check connection to the vehicle,",
+                                 "make sure the ignition is ON, and try clearing the codes again.",
+                                 "OK", NULL, 0, 0);
                         else // if we were reading codes or requesting number or DTCs
-                           alert("There may have been a loss of connection.", "Please check connection to the vehicle,", "and make sure the ignition is ON", "OK", NULL, 0, 0);
+                           alert("There may have been a loss of connection.",
+                                 "Please check connection to the vehicle,",
+                                 "and make sure the ignition is ON",
+                                 "OK", NULL, 0, 0);
                      }
                      else
                         display_error_message(response_type, FALSE);
@@ -685,12 +703,18 @@ int tr_code_proc(int msg, DIALOG *d, int c)
                   clear_trouble_codes();
                   broadcast_dialog_message(MSG_READY, 0);
 
-                  if(alert("Device is not responding.", "Please check that it is connected", "and the port settings are correct", "OK",  "&Configure Port", 27, 'c') == 2)
+                  if(alert("Device is not responding.",
+                           "Please check that it is connected",
+                           "and the port settings are correct",
+                           "OK", "&Configure Port", 27, 'c') == 2)
                      display_options();   // let the user choose correct settings
 
                   while (comport.status == NOT_OPEN)
                   {
-                     if (alert("Port is not ready.", "Please check that you specified the correct port", "and that no other application is using it", "&Configure Port", "&Ignore", 'c', 'i') == 1)
+                     if (alert("Port is not ready.",
+                               "Please check that you specified the correct port",
+                               "and that no other application is using it",
+                               "&Configure Port", "&Ignore", 'c', 'i') == 1)
                         display_options(); // let the user choose correct settings
                      else
                         comport.status = USER_IGNORED;

@@ -175,7 +175,8 @@ int option_element_proc(int msg, DIALOG *d, int c)
                   d->flags |= D_SELECTED; // make it selected
                else
                   d->flags &= ~D_SELECTED;
-               if (((option_element->option_value == WINDOWED_MODE) && !(display_mode & WINDOWED_MODE_SUPPORTED)) || ((option_element->option_value == FULL_SCREEN_MODE) && !(display_mode & FULLSCREEN_MODE_SUPPORTED)))
+               if (((option_element->option_value == WINDOWED_MODE) && !(display_mode & WINDOWED_MODE_SUPPORTED)) ||
+                   ((option_element->option_value == FULL_SCREEN_MODE) && !(display_mode & FULLSCREEN_MODE_SUPPORTED)))
                   d->flags |= D_DISABLED;
                else
                   d->flags &= ~D_DISABLED;
@@ -230,7 +231,10 @@ int save_options_proc(int msg, DIALOG *d, int c)
       
       if (comport.baud_rate != old_baud_rate)
       {
-         if (alert("WARNING!", "This operation may cause scan tool to stop responding.", "Are you sure you want to change the baud rate?", "Yes", "No", 0, 0) != 1)
+         if (alert("WARNING!",
+                   "This operation may cause scan tool to stop responding.",
+                   "Are you sure you want to change the baud rate?",
+                   "Yes", "No", 0, 0) != 1)
          {
             comport.baud_rate = old_baud_rate;
             broadcast_dialog_message(MSG_REFRESH, 0);
@@ -241,7 +245,8 @@ int save_options_proc(int msg, DIALOG *d, int c)
       close_comport(); // close current comport
       open_comport(); // try reinitializing comport (comport.status will be set)
       
-      if ((!(display_mode & WINDOWED_MODE) && (display_mode & WINDOWED_MODE_SET)) || ((display_mode & WINDOWED_MODE) && !(display_mode & WINDOWED_MODE_SET)))
+      if ((!(display_mode & WINDOWED_MODE) && (display_mode & WINDOWED_MODE_SET)) ||
+          ((display_mode & WINDOWED_MODE) && !(display_mode & WINDOWED_MODE_SET)))
       {
          bmp = create_bitmap(SCREEN_W, SCREEN_H);
          if (bmp)
@@ -281,7 +286,10 @@ int save_options_proc(int msg, DIALOG *d, int c)
       file = fopen(options_file_name, "a");
 
       if (file == NULL)
-         alert("Options could not be saved, because file", options_file_name, "could not be open for writing", "OK", NULL, 0, 0);
+         alert("Options could not be saved, because file",
+               options_file_name,
+               "could not be open for writing",
+               "OK", NULL, 0, 0);
       else
       {
          fclose(file);

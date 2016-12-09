@@ -261,7 +261,10 @@ int Reset_get_reply_to_detect_protocol(char *response)
       status = process_response("0100", response);
 
       if (status == ERR_NO_DATA || status == UNABLE_TO_CONNECT)
-         alert("Protocol could not be detected.", "Please check connection to the vehicle,", "and make sure the ignition is ON", "OK", NULL, 0, 0);
+         alert("Protocol could not be detected.",
+               "Please check connection to the vehicle,",
+               "and make sure the ignition is ON",
+               "OK", NULL, 0, 0);
       else if (status != HEX_DATA)
          alert("Communication error", buf, NULL, "OK", NULL, 0, 0);
       
